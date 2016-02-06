@@ -1,4 +1,4 @@
-import requests, bs4, os
+import requests, bs4, os, urllib
 import dictTools #My created tools for working with dictionaries
 '''
 Spanishdict.com search for "palabra" returns:
@@ -23,9 +23,9 @@ result[0].getText() returns 'palabra'
 '''
 
 def intro():
-    print('--Created by Travis Bumgarner (TravisBumgarner.com--')
-    print('------Translations powered by SpanishDict.com-------')
-    print('-----To modify search settings open settings.py-----')
+    print('Created by Travis Bumgarner www.TravisBumgarner.com')
+    print('------Translations powered by SpanishDict.com------')
+    print('----To modify search settings open settings.py-----')
 
 ################################################
 ########## Methods for inputting words #########
@@ -73,20 +73,22 @@ def findWords(wordListToSearch):
 def spanishDictSearch(word):
     res = requests.get('http://www.spanishdict.com/translate/' + word)
     noStarchSoup = bs4.BeautifulSoup(res.text, "html.parser")
-    result = noStarchSoup.select('.lang .el a')
-    #print result[0].getText()
-    return result[0].getText()
+    result = noStarchSoup.select('.lang .el')
+    concatWord = ""
+    for i in range(len(result)):
+        concatWord += result[i].getText()
+        if(i < len(result)-1):
+            #Adds a space between each word unless the last word is reached
+            concatWord += " "
+    return concatWord
     
 def check_connectivity(reference):
-    import urllib
+    #requires urllib
     try:
         urllib.request.urlopen(reference, timeout=1)
         return True
     except urllib.request.URLError:
         return False
-
-
-
 
 #Code Execution
 intro()
