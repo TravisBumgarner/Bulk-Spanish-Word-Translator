@@ -1,5 +1,5 @@
-import requests, bs4
-
+import requests, bs4, os
+import dictTools #My created tools for working with dictionaries
 '''
 Spanishdict.com search for "palabra" returns:
 http://www.spanishdict.com/translate/palabras
@@ -25,19 +25,7 @@ result[0].getText() returns 'palabra'
 def intro():
     print('--Created by Travis Bumgarner (TravisBumgarner.com--')
     print('------Translations powered by SpanishDict.com-------')
-
-def settings():
-    settingsCheck = ''
-    print('Settings are:')
-    #Grab Settings file and print settings.
-    settingsCheck = input('Make save any changes to settings.py before continuing. Press u to update settings or c to continue.\n').lower()    
-    #if(settingsCheck == 'c'):
-    #    #Contunue
-    #elif(settingsCheck == 'u'):
-    #    #Update settings
-
-
-
+    print('-----To modify search settings open settings.py-----')
 
 ################################################
 ########## Methods for inputting words #########
@@ -69,6 +57,7 @@ def importFromTXT():
         return wordListLocationRead.split('\n')
 
 def findWords(wordListToSearch):
+    searchResults = []
     if(type(wordListToSearch) == str):
         #If wordList is single string, convert to list
         wordListToSearch = [wordListToSearch]
@@ -78,14 +67,15 @@ def findWords(wordListToSearch):
         print('Please check internet connection and try again')
     else:
         for word in wordListToSearch:
-            spanishDictSearch(word)
-    searchTerms = input("Input words as either a single string or a list: ")
-
+            searchResults.append(spanishDictSearch(word))
+    return searchResults
+    
 def spanishDictSearch(word):
     res = requests.get('http://www.spanishdict.com/translate/' + word)
     noStarchSoup = bs4.BeautifulSoup(res.text, "html.parser")
     result = noStarchSoup.select('.lang .el a')
-    print(result)
+    #print result[0].getText()
+    return result[0].getText()
     
 def check_connectivity(reference):
     import urllib
@@ -99,7 +89,4 @@ def check_connectivity(reference):
 
 
 #Code Execution
-'''
 intro()
-settings()
-'''

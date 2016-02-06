@@ -1,6 +1,6 @@
 import csv, shutil, os
 
-def newDictionary(dict):
+def newD(dict):
     #requires os module
     fileName, fileExtension = os.path.splitext(dict)
     if(os.path.isfile(dict)):
@@ -10,22 +10,22 @@ def newDictionary(dict):
     else:
         newDict = open(dict,'w')
 
-def openDictionary(fileName):
+def openD(fileName):
     #requires csv module
     dictionaryFile = open(fileName)
     dictionaryReader = csv.reader(dictionaryFile)
     dictionaryData = list(dictionaryReader)
     return "Dictionary " + fileName + " was successfully opened. It's contents are " + str(dictionaryData)
 
-def saveDictionary():
+def saveD():
     #I have no idea what this will do
     print("Yay!")
 
-def appendDictionary():
+def appendD():
     #I have no idea what this will do
     print("Yay!")
 
-def backupDictionary(fileToBackup):
+def backupD(fileToBackup):
     #requires os
     backupFolder = ".\dictBackup"
     fileName, fileExtension = os.path.splitext(fileToBackup)
@@ -41,7 +41,7 @@ def backupDictionary(fileToBackup):
                 break
         return newFileName
    
-def searchDictionary(word,dictionary,col):
+def searchD(word,dictionary,col):
     #Which word to search for
     #Which dictionary to search in
     # Which column to search through
