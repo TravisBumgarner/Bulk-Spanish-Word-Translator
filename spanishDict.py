@@ -36,6 +36,11 @@ def settings():
     #elif(settingsCheck == 'u'):
     #    #Update settings
 
+
+
+
+################################################
+########## Methods for inputting words #########
 def inputWordList():
     print("Enter each word followed by pressing enter.")
     print("Once you're done entering words type 'AllDone'")
@@ -46,6 +51,22 @@ def inputWordList():
         if(word!="AllDone"):
             wordsList.append(word)
     return wordsList
+
+def importFromTXT():
+    #Reads wordlist form txt
+    #requires os module
+    wordListLocation = ''
+    while(not os.path.isfile(wordListLocation)):
+        try:
+            wordListLocation = input('Specify txt file to import:\n')
+            wordListLocationOpen = open(wordListLocation)
+            wordListLocationRead = wordListLocationOpen.read()
+            #wordList = wordListLocation.read()
+        except FileNotFoundError:
+            print("Enter a valid file location")
+        except PermissionError:
+            print("Make sure to specify the file name and file path.")
+        return wordListLocationRead.split('\n')
 
 def findWords(wordListToSearch):
     if(type(wordListToSearch) == str):

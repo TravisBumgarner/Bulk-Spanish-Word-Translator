@@ -1,0 +1,4 @@
+perro
+gato
+queso
+rojo
