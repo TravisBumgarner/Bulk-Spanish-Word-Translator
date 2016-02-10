@@ -94,3 +94,12 @@ def check_connectivity(reference):
 
 #Code Execution
 intro()
+spanishWords = inputWordList()
+print(spanishWords)
+englishWords = findWords(spanishWords)
+print(englishWords)
+originalWords = spanishWords
+print(originalWords)
+myDict = {}
+myDictNew = dictTools.appendD(myDict,spanishWords[0],englishWords,originalWords)
+

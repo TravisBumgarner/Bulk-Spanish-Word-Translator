@@ -1,14 +1,14 @@
 import csv, shutil, os
 
-def newD(dict):
+def newD(dictionaryName):
     #requires os module
-    fileName, fileExtension = os.path.splitext(dict)
-    if(os.path.isfile(dict)):
-        print(dict + " already exists. Please enter a unique file name")
+    fileName, fileExtension = os.path.splitext(dictionaryName)
+    if(os.path.isfile(dictionaryName)):
+        print(dictionaryName + " already exists. Please enter a unique file name")
     elif(fileExtension != ".csv"):
-        print(dict + " does not have .csv file extension.")
+        print(dictionaryName + " does not have .csv file extension.")
     else:
-        newDict = open(dict,'w')
+        newDict = open(dictionaryName,'w')
 
 def openD(fileName):
     #requires csv module
@@ -20,10 +20,12 @@ def openD(fileName):
 def saveD():
     #I have no idea what this will do
     print("Yay!")
+    #dictLayout = {'spanishWord':['eng word',['forms','seem','of','word'],'timesSeen']}
 
-def appendD():
-    #I have no idea what this will do
-    print("Yay!")
+def appendD(dictionary,spanishWord,englishWord,wordSeen):
+    timesSeen = 1
+    dictionary[spanishWord] = [englishWord, [wordSeen], timesSeen]
+    return dictionary
 
 def backupD(fileToBackup):
     #requires os
