@@ -1,14 +1,7 @@
 import csv, shutil, os
 
-def newD(dictionaryName):
-    #requires os module
-    fileName, fileExtension = os.path.splitext(dictionaryName)
-    if(os.path.isfile(dictionaryName)):
-        print(dictionaryName + " already exists. Please enter a unique file name")
-    elif(fileExtension != ".csv"):
-        print(dictionaryName + " does not have .csv file extension.")
-    else:
-        newDict = open(dictionaryName,'w')
+def newD():
+    return {}
 
 def openD(fileName):
     #requires csv module
@@ -22,11 +15,17 @@ def saveD():
     print("Yay!")
     #dictLayout = {'spanishWord':['eng word',['forms','seem','of','word'],'timesSeen']}
 
-def appendD(dictionary,spanishWord,englishWord,wordSeen):
-    timesSeen = 1
-    dictionary[spanishWord] = [englishWord, [wordSeen], timesSeen]
-    return dictionary
-
+def appendListD(dictionary, spanishWordList, englishWordList, seenWordList):
+    #adds new entries found to dictionary
+    #don't set equation equal to anything. Takes in dictionary and returns 
+    def appendD(dictionary,spanishWord,englishWord,seenWord):
+        timesSeen = 1
+        dictionary[spanishWord] = [englishWord, [seenWord], timesSeen]
+        return dictionary
+        
+    for index in range(len(spanishWordList)):
+        appendD(dictionary, spanishWordList[index], englishWordList[index], seenWordList[index])
+    
 def backupD(fileToBackup):
     #requires os
     backupFolder = ".\dictBackup"
@@ -57,4 +56,11 @@ def searchD(word,dictionary,col):
         print("found")
     else:
         print("not found")
-    
+
+def printPrettyD(dictionary):
+    for i in dictionary:
+        stringOfSeen = ""
+        for j in dictionary[i][1]:
+            stringOfSeen += " " + j
+        print("The word \"" + i + "\" in English is \"" + dictionary[i][0] + "\". It has been seen " + str(dictionary[i][2]) + " times, as" + stringOfSeen + ".")
+        

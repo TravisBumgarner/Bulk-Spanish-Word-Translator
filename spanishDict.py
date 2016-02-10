@@ -29,7 +29,7 @@ def intro():
 
 ################################################
 ########## Methods for inputting words #########
-def inputWordList():
+def createFromText():
     print("Enter each word followed by pressing enter.")
     print("Once you're done entering words type 'AllDone'")
     wordsList = []
@@ -40,7 +40,7 @@ def inputWordList():
             wordsList.append(word)
     return wordsList
 
-def importFromTXT():
+def createFromFile():
     #Reads wordlist form txt
     #requires os module
     wordListLocation = ''
@@ -56,7 +56,7 @@ def importFromTXT():
             print("Make sure to specify the file name and file path.")
         return wordListLocationRead.split('\n')
 
-def findWords(wordListToSearch):
+def findEnglishWords(wordListToSearch):
     searchResults = []
     if(type(wordListToSearch) == str):
         #If wordList is single string, convert to list
@@ -92,14 +92,9 @@ def check_connectivity(reference):
     except urllib.request.URLError:
         return False
 
-#Code Execution
-intro()
-spanishWords = inputWordList()
-print(spanishWords)
-englishWords = findWords(spanishWords)
-print(englishWords)
-originalWords = spanishWords
-print(originalWords)
-myDict = {}
-myDictNew = dictTools.appendD(myDict,spanishWords[0],englishWords,originalWords)
-
+spanish = createFromText()
+english = findEnglishWords(spanish)
+seen = spanish #change this once I've had a way to track orginal input
+dictionary = dictTools.newD()
+dictTools.appendListD(dictionary,spanish,english,seen)
+print(dictionary)
