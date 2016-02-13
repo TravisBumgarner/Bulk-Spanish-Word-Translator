@@ -95,8 +95,8 @@ class dt():
             os.makedirs(exportFolder)
         #Used for creating unique filenames for each time save
         fileAndDir = exportFolder + "\\" + self.genFileName(fileName,exportFolder)
-        print(fileAndDir)
         writeToFile = open(fileAndDir,'w')
         for each in self.dictionary:
             writeToFile.write(each + "\t" + self.dictionary[each][0] + "\n")
         writeToFile.close()
+        print("Files successfully exported.")

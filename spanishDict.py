@@ -122,8 +122,11 @@ def runFunction():
     seenSpanish = add.fromText()
     results = spanishToEnglish(seenSpanish)
     return results
+'''
 results = runFunction();
 newD = dt()
 newD.newEntryD(results)
+newD.printD()
 newD.ankiExportD("results.txt")
+'''
 
