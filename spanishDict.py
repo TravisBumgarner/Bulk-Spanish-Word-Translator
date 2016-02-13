@@ -67,18 +67,32 @@ def spanishDictSearch(word):
     #requires bs4, requests
     res = requests.get('http://www.spanishdict.com/translate/' + word)
     noStarchSoup = bs4.BeautifulSoup(res.text, "html.parser")
-    result = noStarchSoup.select('.lang .el')
-    concatWord = ""
+    resultEnglish = noStarchSoup.select('.lang .el')
+    resultSpanish = noStarchSoup.select('h1[class="source-text"]')
+    resultSpanish = resultSpanish[0].getText()
+    formattedResultEnglish = ""
     #Following code deals with how SpaishDict presents words such as El Gato nested inside two different link tags.
-    for i in range(len(result)):
-        concatWord += result[i].getText()
-        if(i < len(result)-1):
-            #Adds a space between each word unless the last word is reached
-            concatWord += " "
-    return concatWord
+    if len(resultEnglish)>1:
+        for i in range(len(resultEnglish)):
+            formattedResultEnglish += resultEnglish[i].getText()
+            if(i < len(resultEnglish)-1):
+                #Adds a space between each word unless the last word is reached
+                formattedResultEnglish += " "
+    else:
+        formattedResultEnglish = resultEnglish[0].getText()               
+    return [word, resultSpanish,formattedResultEnglish]
 
 def spanishToEnglish(wordListToSearch):
-    searchResults = []
+    def validWordCheck(word):
+        while True:
+            try:
+                return spanishDictSearch(word)
+            except IndexError:
+                word = input(word + " not found. Enter word again or type 'skipWord' to continue.\n")
+                if(word == "skipWord"):
+                    return
+                else:
+                    continue
     if(type(wordListToSearch) == str):
         #If wordList is single string, convert to list
         wordListToSearch = [wordListToSearch]
@@ -87,13 +101,12 @@ def spanishToEnglish(wordListToSearch):
         #URL For Google to see if internet is working
         print('Please check internet connection and try again')
     else:
+        searchResults = []
         for word in wordListToSearch:
-            if(spanishDictSearch(word)==""):
-                word = input(word + " not found. Enter word again or type 'skipWord' to continue.\n")
-                if(word == "skipWord"):
-                    continue                    
-            searchResults.append(spanishDictSearch(word))
-                
+            searchResults.append(validWordCheck(word))
+
+    
+
     return searchResults
     
 def check_connectivity(reference):
@@ -107,6 +120,6 @@ def check_connectivity(reference):
 def runFunction():
     intro()
     seenSpanish = add.fromText()
-    english = spanishToEnglish(seenSpanish)
-    print(results)
-runFunction()
+    results = spanishToEnglish(seenSpanish)
+    return results
+#runFunction()
