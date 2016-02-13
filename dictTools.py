@@ -33,16 +33,16 @@ class dt():
         except KeyError:
             print("The word " + spanishWord + " was not found in the dictionary.")
         
-    def newEntryD(self,spanishWordList,englishWordList, seenWordList):
-        def appendEachD(spanishWord,englishWord,seenWord):
+    def newEntryD(self,searchResults):
+        def appendEachD(seenWord,spanishWord,englishWord):
             timesSeen = 1
             self.dictionary[spanishWord] = [englishWord, [seenWord],timesSeen]
             #return dictionary
             #pretty sure I don't need this anymore
-        for index in range(len(spanishWordList)):
-            appendEachD(spanishWordList[index],
-                        englishWordList[index],
-                           seenWordList[index])
+        for result in searchResults:
+            appendEachD(result[0],
+                        result[1],
+                        result[2])
 
     def genFileName(self,fileName,filePath):
         #Generates unique filenames
@@ -78,6 +78,15 @@ class dt():
 
     def printD(self):
         print(self.dictionary)
+        print("Spanish Word".center(30,"-") + "|" +
+              "English Word".center(30,"-") + "|" +
+              "Words Seen".center(70,"-") + "|" +
+              "Times Seen".center(15,"-"))
+        for each in self.dictionary:
+            print(each.ljust(30) + "|" +
+                  self.dictionary[each][0].ljust(30) + "|" + 
+                  str(self.dictionary[each][1]).ljust(70) + "|" +
+                  str(self.dictionary[each][2]).ljust(15))
             
     def ankiExportD(self,fileName):
         exportFolder = ".\\ankiExport"
