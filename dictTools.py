@@ -91,12 +91,3 @@ class dt():
         for each in self.dictionary:
             writeToFile.write(each + "\t" + self.dictionary[each][0] + "\n")
         writeToFile.close()
-                                    
-        
-            
-                                          
-newD = dt()
-test = ["cat","dog"]
-newD.newEntryD(test,test,test)
-newD.modifyEntryD("dog","dear")
-newD.ankiExportD("cat.txt")

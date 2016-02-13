@@ -1,5 +1,5 @@
 import requests, bs4, os, urllib
-import dt #My created tools for working with dictionaries
+from dictTools import dt #My created tools for working with dictionaries
 '''
 Spanishdict.com search for "palabra" returns:
 http://www.spanishdict.com/translate/palabras
