@@ -5,15 +5,21 @@ class dt():
     def __init__(self):
         #Starts with a blank dictionary
         self.dictionary = {}
+
+    def newD(self,fileName):
+        pickle.dump(self.dictionary,open(fileName,"wb"))
         
     def openD(self,fileName):
         #Use pickle to open file
         try:
             self.dictionary = pickle.load(open(fileName,"rb"))
+            return True
         except FileNotFoundError:
-            print("File does not exist.")
+            #print("File does not exist.")
+            return False
         except pickle.UnpicklingError:
-            print("Not valid pickle file.")
+            #print("Not valid pickle file.")
+            return False
 
     def saveD(self,fileName):
         #Use pickle to save file

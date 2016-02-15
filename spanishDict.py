@@ -117,18 +117,21 @@ def check_connectivity(reference):
     except urllib.request.URLError:
         return False
 
-def runFunction():
+def searchAndSave(fileName = "newDict.p"):
     intro()
     seenSpanish = add.fromText()
     results = spanishToEnglish(seenSpanish)
-    return results
-'''
-results = runFunction()
-newD = dt()
-newD.newEntryD(results)
-newD.printD()
-newD.ankiExportD("results.txt")
-results2 = runFunction()
-
-'''
+    tempD = dt()
+    # If file exists, open, else, create.
+    if(tempD.openD(fileName) == True):
+        tempD.openD(fileName)
+    elif(tempD.openD(fileName) == False):
+        tempD.newD(fileName)
+    else:
+        return "Not successfully opened."
+    tempD.newEntryD(results)
+    tempD.printD()
+    tempD.ankiExportD(fileName)
+    tempD.backupD(fileName)
+    tempD.saveD(fileName)
 
