@@ -123,10 +123,12 @@ def runFunction():
     results = spanishToEnglish(seenSpanish)
     return results
 '''
-results = runFunction();
+results = runFunction()
 newD = dt()
 newD.newEntryD(results)
 newD.printD()
 newD.ankiExportD("results.txt")
+results2 = runFunction()
+
 '''
 

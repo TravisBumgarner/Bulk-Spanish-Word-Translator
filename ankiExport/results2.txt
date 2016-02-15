@@ -1,0 +1,3 @@
+cotorra	parrot; chatterbox
+trenza	braid
+gato	cat
