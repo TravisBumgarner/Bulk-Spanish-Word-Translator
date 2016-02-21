@@ -88,31 +88,23 @@ def spanishDictSearch(word):
         resultSpanish = resultSpanish[0].getText()
         resultEnglish = englishWordConcat(noStarchSoup.select('.dictionary-neoharrap-translation-translation'))
     return([word,resultSpanish,resultEnglish])
-def spanishToEnglish(wordListToSearch):
-    def validWordCheck(word):
-        while True:
-            try:
-                spanishDictSearch(word)
-            except IndexError:
-                word = input(word + " not found. Enter word again or type 'skipWord' to continue.\n")
-                if(word == "skipWord"):
-                    return False
-                else:
-                    continue
-    if(type(wordListToSearch) == str):
-        #If wordList is single string, convert to list
-        wordListToSearch = [wordListToSearch]
-            
+
+def spanishToEnglish(wordListToSearch):               
     if(not check_connectivity('http://74.125.224.72/')):
         #URL For Google to see if internet is working
         print('Please check internet connection and try again')
     else:
         searchResults = []
         for word in wordListToSearch:
-            if validWordCheck(word) != False:
-                searchResults.append(validWordCheck(word))
-
-    
+            while True:
+                try:
+                    return spanishDictSearch(word)
+                except IndexError:
+                    word = input(word + " not found. Enter word again or type 'skipWord' to continue.\n")
+                    if(word == "skipWord"):
+                        return False
+                    else:
+                        continue    
 
     return searchResults
     
