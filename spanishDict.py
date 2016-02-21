@@ -121,6 +121,7 @@ def searchAndSave(fileName = "newDict.p"):
     intro()
     seenSpanish = add.fromText()
     results = spanishToEnglish(seenSpanish)
+    #print(results)
     tempD = dt()
     # If file exists, open, else, create.
     if(tempD.openD(fileName) == True):
@@ -129,9 +130,18 @@ def searchAndSave(fileName = "newDict.p"):
         tempD.newD(fileName)
     else:
         return "Not successfully opened."
-    tempD.newEntryD(results)
+    for eachResult in results:
+        #Simplify results from abstract list values to what they actually are
+        seenWord = eachResult[0]
+        spanishWord = eachResult[1]
+        englishWord = eachResult[2]
+        if tempD.existsD(spanishWord) == False:
+            #If Word isn't found, run new word function
+            tempD.newEntryD(seenWord,spanishWord,englishWord)
+        elif tempD.existsD(spanishWord) == True:
+            tempD.modifyEntryD(spanishWord, seenWord)       
     tempD.printD()
-    tempD.ankiExportD(fileName)
-    tempD.backupD(fileName)
+    #tempD.ankiExportD(fileName)
+    #tempD.backupD(fileName)
     tempD.saveD(fileName)
 

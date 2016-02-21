@@ -39,16 +39,9 @@ class dt():
         except KeyError:
             print("The word " + spanishWord + " was not found in the dictionary.")
         
-    def newEntryD(self,searchResults):
-        def appendEachD(seenWord,spanishWord,englishWord):
-            timesSeen = 1
-            self.dictionary[spanishWord] = [englishWord, [seenWord],timesSeen]
-            #return dictionary
-            #pretty sure I don't need this anymore
-        for result in searchResults:
-            appendEachD(result[0],
-                        result[1],
-                        result[2])
+    def newEntryD(self,seenWord,spanishWord,englishWord):
+        timesSeen = 1
+        self.dictionary[spanishWord] = [englishWord, [seenWord],timesSeen]
 
     def genFileName(self,fileName,filePath):
         #Generates unique filenames
@@ -72,6 +65,8 @@ class dt():
         pickle.dump(self.dictionary,open(backupFolder + "\\" + self.genFileName(fileName,backupFolder),"wb"))
 
     def searchD(self,word):
+        #Function used for just seeing if a word exists.
+        #Different from 
         try:
             #Creates list of forms seen of the word.
             formsSeenStr = ', '.join(self.dictionary[word][1])
@@ -82,6 +77,12 @@ class dt():
         except KeyError:
             print("The word " + word + " was not found in the dictionary.")
 
+    def existsD(self,word):
+        wordCheck = self.dictionary.get(word,0)
+        if wordCheck == 0:
+            return False
+        else:
+            return True
     def printD(self):
         print(self.dictionary)
         print("Spanish Word".center(30,"-") + "|" +
