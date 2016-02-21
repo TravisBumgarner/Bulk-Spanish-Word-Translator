@@ -89,6 +89,20 @@ def spanishDictSearch(word):
         resultEnglish = englishWordConcat(noStarchSoup.select('.dictionary-neodict-translation-translation'))
     return([word,resultSpanish,resultEnglish])                  
 
+def singAndMascWord(word):
+    if word[-2:] == "es":
+        #If word ends with es, remove es
+        word = word[0:-2]
+
+    elif word[-2:] == "as":
+        #If word ends with as, remove as and replace with o
+         word = word[0:-2] + "o"
+
+    elif word[-1:] == "s":
+        #Else if word ends with s, remove s
+        word = word[0:-1]
+    return word
+
 def spanishToEnglish(wordListToSearch):               
     if(not check_connectivity('http://74.125.224.72/')):
         #URL For Google to see if internet is working
@@ -99,7 +113,7 @@ def spanishToEnglish(wordListToSearch):
             skip = False
             while skip == False:
                 try:
-                    searchResult = spanishDictSearch(word)
+                    searchResult = spanishDictSearch(singAndMascWord(word))
                 except IndexError:
                     word = input(word + " not found. Enter word again or type 's' to continue.\n")
                     if(word == "s"):
