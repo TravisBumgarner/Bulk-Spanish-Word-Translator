@@ -65,6 +65,7 @@ class add:
 
 def spanishDictSearch(word):
     #requires bs4, requests
+    #This function goes online and grabs each word
     res = requests.get('http://www.spanishdict.com/translate/' + word)
     noStarchSoup = bs4.BeautifulSoup(res.text, "html.parser")
     resultEnglish = noStarchSoup.select('.lang .el')
@@ -90,7 +91,7 @@ def spanishToEnglish(wordListToSearch):
             except IndexError:
                 word = input(word + " not found. Enter word again or type 'skipWord' to continue.\n")
                 if(word == "skipWord"):
-                    return
+                    return False
                 else:
                     continue
     if(type(wordListToSearch) == str):
@@ -103,7 +104,8 @@ def spanishToEnglish(wordListToSearch):
     else:
         searchResults = []
         for word in wordListToSearch:
-            searchResults.append(validWordCheck(word))
+            if validWordCheck(word) != False:
+                searchResults.append(validWordCheck(word))
 
     
 
