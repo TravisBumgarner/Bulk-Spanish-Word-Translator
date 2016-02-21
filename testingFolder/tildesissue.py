@@ -4,6 +4,7 @@ def fromFile(fileName):
     #requires os, io module
 
     with io.open(fileName,'r',encoding='utf8') as f:
-        text = f.read()
+        text = f.read().replace('\ufeff', '').split("\n")
         print(text)
-    return text.split('\n')
+    #text = text
+    return text

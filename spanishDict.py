@@ -51,12 +51,9 @@ class add:
         #requires os, io module
         try:
             with io.open(fileName,'r',encoding='utf8') as f:
-                fileNameOpen = f.read()
-                #print(f)
-            fileNameRead = fileNameOpen.read()
-            return fileNameRead.split('\n')
-        #except FileNotFoundError:
-        #    print("Enter a valid file location")
+                return f.read().replace('\ufeff', '').split("\n")
+        except FileNotFoundError:
+            print("Enter a valid file location")
         except PermissionError:
             print("Make sure to specify the file name and file path.")
 
@@ -73,6 +70,7 @@ def englishWordConcat(englishBits):
 
 def spanishDictSearch(word):
     #requires bs4, requests
+    print("Searching for " + word + "...")
     res = requests.get('http://www.spanishdict.com/translate/' + word)
     resultEnglish = []
     resultSpanish = []
@@ -94,7 +92,7 @@ def spanishToEnglish(wordListToSearch):
     def validWordCheck(word):
         while True:
             try:
-                return spanishDictSearch(word)
+                spanishDictSearch(word)
             except IndexError:
                 word = input(word + " not found. Enter word again or type 'skipWord' to continue.\n")
                 if(word == "skipWord"):
@@ -128,8 +126,8 @@ def check_connectivity(reference):
 
 def searchAndSave(fileName = "newDict.p"):
     intro()
-    seenSpanish = add.fromText()
-    #seenSpanish = add.fromFile("myWordsToday.txt")
+    #seenSpanish = add.fromText()
+    seenSpanish = add.fromFile("myWordsToday.txt")
     results = spanishToEnglish(seenSpanish)
     #print(results)
     tempD = dt()
