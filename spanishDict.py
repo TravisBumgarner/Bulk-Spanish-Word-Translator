@@ -1,4 +1,4 @@
-import requests, bs4, os, urllib
+import requests, bs4, os, urllib, io
 from dictTools import dt #My created tools for working with dictionaries
 
 '''
@@ -48,14 +48,15 @@ class add:
         
     def fromFile(fileName):
         #Reads wordlist form txt
-        #requires os module
+        #requires os, io module
         try:
-            fileNameOpen = open(fileName)
+            with io.open(fileName,'r',encoding='utf8') as f:
+                fileNameOpen = f.read()
+                #print(f)
             fileNameRead = fileNameOpen.read()
-            #wordList = wordListLocation.read()
             return fileNameRead.split('\n')
-        except FileNotFoundError:
-            print("Enter a valid file location")
+        #except FileNotFoundError:
+        #    print("Enter a valid file location")
         except PermissionError:
             print("Make sure to specify the file name and file path.")
 
@@ -63,26 +64,32 @@ class add:
 ### Translate Class will go Here###
 ###################################
 
+def englishWordConcat(englishBits):
+    englishWordParts = []
+    for index in range(len(englishBits)):
+        englishWordParts.append(englishBits[index].getText())
+    englishBitsCombined = " ".join(englishWordParts)
+    return englishBitsCombined
+
 def spanishDictSearch(word):
     #requires bs4, requests
-    #This function goes online and grabs each word
     res = requests.get('http://www.spanishdict.com/translate/' + word)
+    resultEnglish = []
+    resultSpanish = []
     noStarchSoup = bs4.BeautifulSoup(res.text, "html.parser")
-    resultEnglish = noStarchSoup.select('.lang .el')
-    resultSpanish = noStarchSoup.select('h1[class="source-text"]')
-    resultSpanish = resultSpanish[0].getText()
-    formattedResultEnglish = ""
-    #Following code deals with how SpaishDict presents words such as El Gato nested inside two different link tags.
-    if len(resultEnglish)>1:
-        for i in range(len(resultEnglish)):
-            formattedResultEnglish += resultEnglish[i].getText()
-            if(i < len(resultEnglish)-1):
-                #Adds a space between each word unless the last word is reached
-                formattedResultEnglish += " "
-    else:
-        formattedResultEnglish = resultEnglish[0].getText()               
-    return [word, resultSpanish,formattedResultEnglish]
-
+    if noStarchSoup.select('.lang .el') != []:
+        #This deals with layout when SpanishDict puts exact translation
+        #Directly underneath the spanish word, such as in gato.
+        resultEnglish = englishWordConcat(noStarchSoup.select('.lang .el'))
+    
+        resultSpanish = noStarchSoup.select('h1[class="source-text"]')
+        resultSpanish = resultSpanish[0].getText()
+    elif noStarchSoup.select('.lang .el') == []:
+        #Deals with word being more nested in the document.
+        resultSpanish = noStarchSoup.select('h1[class="source-text"]')
+        resultSpanish = resultSpanish[0].getText()
+        resultEnglish = englishWordConcat(noStarchSoup.select('.dictionary-neoharrap-translation-translation'))
+    return([word,resultSpanish,resultEnglish])
 def spanishToEnglish(wordListToSearch):
     def validWordCheck(word):
         while True:
@@ -122,6 +129,7 @@ def check_connectivity(reference):
 def searchAndSave(fileName = "newDict.p"):
     intro()
     seenSpanish = add.fromText()
+    #seenSpanish = add.fromFile("myWordsToday.txt")
     results = spanishToEnglish(seenSpanish)
     #print(results)
     tempD = dt()
@@ -137,6 +145,7 @@ def searchAndSave(fileName = "newDict.p"):
         seenWord = eachResult[0]
         spanishWord = eachResult[1]
         englishWord = eachResult[2]
+        print(spanishWord)
         if tempD.existsD(spanishWord) == False:
             #If Word isn't found, run new word function
             tempD.newEntryD(seenWord,spanishWord,englishWord)
