@@ -86,8 +86,8 @@ def spanishDictSearch(word):
         #Deals with word being more nested in the document.
         resultSpanish = noStarchSoup.select('h1[class="source-text"]')
         resultSpanish = resultSpanish[0].getText()
-        resultEnglish = englishWordConcat(noStarchSoup.select('.dictionary-neoharrap-translation-translation'))
-    return([word,resultSpanish,resultEnglish])
+        resultEnglish = englishWordConcat(noStarchSoup.select('.dictionary-neodict-translation-translation'))
+    return([word,resultSpanish,resultEnglish])                  
 
 def spanishToEnglish(wordListToSearch):               
     if(not check_connectivity('http://74.125.224.72/')):
@@ -96,15 +96,18 @@ def spanishToEnglish(wordListToSearch):
     else:
         searchResults = []
         for word in wordListToSearch:
-            while True:
+            skip = False
+            while skip == False:
                 try:
-                    return spanishDictSearch(word)
+                    searchResult = spanishDictSearch(word)
                 except IndexError:
-                    word = input(word + " not found. Enter word again or type 'skipWord' to continue.\n")
-                    if(word == "skipWord"):
-                        return False
+                    word = input(word + " not found. Enter word again or type 's' to continue.\n")
+                    if(word == "s"):
+                        skip == False
                     else:
-                        continue    
+                        continue
+                skip = True
+            searchResults.append(searchResult)
 
     return searchResults
     
@@ -121,6 +124,7 @@ def searchAndSave(fileName = "newDict.p"):
     #seenSpanish = add.fromText()
     seenSpanish = add.fromFile("myWordsToday.txt")
     results = spanishToEnglish(seenSpanish)
+    print(results)
     #print(results)
     tempD = dt()
     # If file exists, open, else, create.
@@ -135,14 +139,13 @@ def searchAndSave(fileName = "newDict.p"):
         seenWord = eachResult[0]
         spanishWord = eachResult[1]
         englishWord = eachResult[2]
-        print(spanishWord)
         if tempD.existsD(spanishWord) == False:
             #If Word isn't found, run new word function
             tempD.newEntryD(seenWord,spanishWord,englishWord)
         elif tempD.existsD(spanishWord) == True:
             tempD.modifyEntryD(spanishWord, seenWord)       
-    tempD.printD()
+    #tempD.printD()
     #tempD.ankiExportD(fileName)
     #tempD.backupD(fileName)
-    tempD.saveD(fileName)
+    #tempD.saveD(fileName)
 
