@@ -1,3 +1,0 @@
-gato	cat
-perro	dog
-mascota	pet

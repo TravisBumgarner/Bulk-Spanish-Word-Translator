@@ -18,4 +18,8 @@ def singAndMascWord(word):
             #Else if word ends with s, remove s
             word = word[0:-1]
         return word
+import requests, bs4
 
+
+    
+    

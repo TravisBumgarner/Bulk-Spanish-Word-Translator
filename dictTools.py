@@ -84,12 +84,12 @@ class dt():
         else:
             return True
     def printD(self):
-        print(self.dictionary)
         print("Spanish Word".center(30,"-") + "|" +
               "English Word".center(30,"-") + "|" +
               "Words Seen".center(70,"-") + "|" +
               "Times Seen".center(15,"-"))
-        for each in self.dictionary:
+        sortedDictionary = sorted(self.dictionary)
+        for each in sortedDictionary:
             print(each.ljust(30) + "|" +
                   self.dictionary[each][0].ljust(30) + "|" + 
                   str(self.dictionary[each][1]).ljust(70) + "|" +

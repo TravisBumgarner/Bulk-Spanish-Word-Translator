@@ -1,2 +1,0 @@
-perro	dog
-gato	cat
