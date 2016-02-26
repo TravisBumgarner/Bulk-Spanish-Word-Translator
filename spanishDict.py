@@ -82,8 +82,8 @@ def spanishDictSearch(word):
         for each in suggestedResults:
             possibleResults.append(each.getText())
         stringOfResults = ", ".join(possibleResults)
-        word = input(word + " might have been spelled wrong. Did you mean: "
-                     + stringOfResults + "? If no, type 's' to skip.")
+        word = input(word + " might have been spelled wrong. \nDid you mean: "
+                     + stringOfResults + "? If no, type 's' to skip.\n")
         if word == "s":
             return None
         print("Searching for " + word + "...")
@@ -95,18 +95,18 @@ def spanishDictSearch(word):
         resultEnglish = englishWordConcat(noStarchSoup.select('.lang .el'))
         resultSpanish = noStarchSoup.select('h1[class="source-text"]')
         resultSpanish = resultSpanish[0].getText()
-    elif noStarchSoup.select('.lang .el') == []:
+    elif noStarchSoup.select('.dictionary-neodict-translation-translation') != []:
         #Deals with word being more nested in the document.
         resultSpanish = noStarchSoup.select('h1[class="source-text"]')
         resultSpanish = resultSpanish[0].getText()
         resultEnglish = englishWordConcat(noStarchSoup.select('.dictionary-neodict-translation-translation'))
-
-        
+    elif noStarchSoup.select('.dictionary-neoharrap-translation-translation') != []:
+        resultSpanish = noStarchSoup.select('h1[class="source-text"]')
+        resultSpanish = resultSpanish[0].getText()
+        resultEnglish = englishWordConcat(noStarchSoup.select('.dictionary-neoharrap-translation-translation'))
+    else:
+        print("You shouldn't see this message. If you do. Add another elif statement for a different dictionary.")
     return([word,resultSpanish,resultEnglish])                  
-
-
-
-
 def singAndMascWord(word):
     if word[-2:] == "es":
         #If word ends with es, remove es
