@@ -82,13 +82,19 @@ def spanishDictSearch(word):
         for each in suggestedResults:
             possibleResults.append(each.getText())
         stringOfResults = ", ".join(possibleResults)
-        word = input(word + " might have been spelled wrong. \nDid you mean: "
-                     + stringOfResults + "? If no, type 's' to skip.\n")
-        if word == "s":
+        #wordModified = input(word + " might have been spelled wrong. \nDid you mean: "
+        #             + stringOfResults + "? If no, type 's' to skip or 'ew' to enter English word manually.\n") 
+        wordModified = "s"
+        if wordModified == "s":
             return None
-        print("Searching for " + word + "...")
-        res = requests.get('http://www.spanishdict.com/translate/' + word)
+        elif wordModified == "ew":
+            resultEnglish = input("Enter English word\n")
+            resultSpanish = input("Enter Spanish word\n")
+            return([word,word,resultEnglish])     
+        print("Searching for " + wordModified + "...")
+        res = requests.get('http://www.spanishdict.com/translate/' + wordModified)
         noStarchSoup = bs4.BeautifulSoup(res.text, "html.parser")
+        word = wordModified
     if noStarchSoup.select('.lang .el') != []:
         #This deals with layout when SpanishDict puts exact translation
         #Directly underneath the spanish word, such as in gato.
@@ -104,8 +110,17 @@ def spanishDictSearch(word):
         resultSpanish = noStarchSoup.select('h1[class="source-text"]')
         resultSpanish = resultSpanish[0].getText()
         resultEnglish = englishWordConcat(noStarchSoup.select('.dictionary-neoharrap-translation-translation'))
+    elif noStarchSoup.select("div .def"):
+        resultSpanish = noStarchSoup.select('h1[class="source-text"]')
+        resultSpanish = resultSpanish[0].getText()
+        resultEnglish = englishWordConcat(noStarchSoup.select('div .def'))
     else:
-        print("You shouldn't see this message. If you do. Add another elif statement for a different dictionary.")
+        #word = input(word + " not found. Enter word again or type 's' to continue.\n")
+        word = "s"
+        if(word == "s"):
+            return None
+        else:
+            spanishDictSearch(word)
     return([word,resultSpanish,resultEnglish])                  
 def singAndMascWord(word):
     if word[-2:] == "es":
@@ -128,20 +143,9 @@ def spanishToEnglish(wordListToSearch):
     else:
         searchResults = []
         for word in wordListToSearch:
-            skip = False
-            while skip == False:
-                try:
-                    searchResult = spanishDictSearch(singAndMascWord(word))
-                except IndexError:
-                    word = input(word + " not found. Enter word again or type 's' to continue.\n")
-                    if(word == "s"):
-                        skip == False
-                    else:
-                        continue
-                skip = True
-                if searchResult != None:
-                    searchResults.append(searchResult)
-
+            searchResult = spanishDictSearch(singAndMascWord(word))
+            if searchResult != None:
+                searchResults.append(searchResult)
     return searchResults
     
 def check_connectivity(reference):
@@ -154,10 +158,8 @@ def check_connectivity(reference):
 
 def searchAndSave(fileName = "newDict.p"):
     intro()
-    #seenSpanish = add.fromText()
     seenSpanish = add.fromFile("myWordsToday.txt")
     results = spanishToEnglish(seenSpanish)
-    #print(results)
     tempD = dt()
     # If file exists, open, else, create.
     if(tempD.openD(fileName) == True):
@@ -171,13 +173,14 @@ def searchAndSave(fileName = "newDict.p"):
         seenWord = eachResult[0]
         spanishWord = eachResult[1]
         englishWord = eachResult[2]
+        print(seenWord + " and " + spanishWord + " and" + englishWord)
         if tempD.existsD(spanishWord) == False:
             #If Word isn't found, run new word function
             tempD.newEntryD(seenWord,spanishWord,englishWord)
         elif tempD.existsD(spanishWord) == True:
             tempD.modifyEntryD(spanishWord, seenWord)       
     tempD.printD()
+    tempD.saveD(fileName)
     tempD.ankiExportD(fileName)
     tempD.backupD(fileName)
-    tempD.saveD(fileName)
 
