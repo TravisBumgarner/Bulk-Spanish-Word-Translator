@@ -82,46 +82,45 @@ def spanishDictSearch(word):
         for each in suggestedResults:
             possibleResults.append(each.getText())
         stringOfResults = ", ".join(possibleResults)
-        #wordModified = input(word + " might have been spelled wrong. \nDid you mean: "
-        #             + stringOfResults + "? If no, type 's' to skip or 'ew' to enter English word manually.\n") 
-        wordModified = "s"
+        wordModified = input(word + " might have been spelled wrong. \nDid you mean: "
+                     + stringOfResults + "? If no, type 's' to skip or 'ew' to enter English word manually.\n") 
         if wordModified == "s":
             return None
         elif wordModified == "ew":
             resultEnglish = input("Enter English word\n")
             resultSpanish = input("Enter Spanish word\n")
             return([word,word,resultEnglish])     
-        print("Searching for " + wordModified + "...")
-        res = requests.get('http://www.spanishdict.com/translate/' + wordModified)
-        noStarchSoup = bs4.BeautifulSoup(res.text, "html.parser")
-        word = wordModified
+        else:
+            return spanishDictSearch(wordModified)
+    resultSpanish = noStarchSoup.select('h1[class="source-text"]')
+    if resultSpanish == []:
+        return None    
+    resultSpanish = resultSpanish[0].getText()
     if noStarchSoup.select('.lang .el') != []:
         #This deals with layout when SpanishDict puts exact translation
         #Directly underneath the spanish word, such as in gato.
         resultEnglish = englishWordConcat(noStarchSoup.select('.lang .el'))
-        resultSpanish = noStarchSoup.select('h1[class="source-text"]')
-        resultSpanish = resultSpanish[0].getText()
     elif noStarchSoup.select('.dictionary-neodict-translation-translation') != []:
-        #Deals with word being more nested in the document.
-        resultSpanish = noStarchSoup.select('h1[class="source-text"]')
-        resultSpanish = resultSpanish[0].getText()
+        #Deals with one of the other types of dictionaries used to look up words.
         resultEnglish = englishWordConcat(noStarchSoup.select('.dictionary-neodict-translation-translation'))
     elif noStarchSoup.select('.dictionary-neoharrap-translation-translation') != []:
-        resultSpanish = noStarchSoup.select('h1[class="source-text"]')
-        resultSpanish = resultSpanish[0].getText()
+        #Deals with one of the other types of dictionaries used to look up words.
         resultEnglish = englishWordConcat(noStarchSoup.select('.dictionary-neoharrap-translation-translation'))
     elif noStarchSoup.select("div .def"):
-        resultSpanish = noStarchSoup.select('h1[class="source-text"]')
-        resultSpanish = resultSpanish[0].getText()
+        #Deals with one of the other types of dictionaries used to look up words.
         resultEnglish = englishWordConcat(noStarchSoup.select('div .def'))
     else:
-        #word = input(word + " not found. Enter word again or type 's' to continue.\n")
-        word = "s"
+        word = input(word + " not found. Enter word again or type 's' to continue.\n")
         if(word == "s"):
             return None
         else:
             spanishDictSearch(word)
+    if resultEnglish == []:
+        return None
     return([word,resultSpanish,resultEnglish])                  
+
+
+
 def singAndMascWord(word):
     if word[-2:] == "es":
         #If word ends with es, remove es
@@ -173,7 +172,7 @@ def searchAndSave(fileName = "newDict.p"):
         seenWord = eachResult[0]
         spanishWord = eachResult[1]
         englishWord = eachResult[2]
-        print(seenWord + " and " + spanishWord + " and" + englishWord)
+        print(str(seenWord) + " and " + str(spanishWord) + " and" + str(englishWord))
         if tempD.existsD(spanishWord) == False:
             #If Word isn't found, run new word function
             tempD.newEntryD(seenWord,spanishWord,englishWord)

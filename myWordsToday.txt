@@ -248,6 +248,35 @@ engañar
 lavar
 ceniza
 tumbar
+tropel
+camilla
+sauce
+registrar
+espantar
+tropezar
+enturbiarse
+barrer
+torturar
+arrojar
+rociar
+aclamar
+canario
+mandíbula
+sibato
+pitido
+matrecho
+sujetar
+seña
+salpicar
+entumecido
+turbulento
+sobresaltar
+azotar
+sordo
+ahogarar
+anulara
+derribar
+rogar
 coges
 fumba
 copias
@@ -379,6 +408,17 @@ echar
 cabrón
 coño
 vete a la mierda
+zorra
+mierda
+captar
+extremadamente
+comprobar
+contradecir
+razonar
+criar
+al fin y al cabo
+lo que
+tan precioso
 acontecimiento
 haré
 marcos
@@ -573,43 +613,3 @@ antemano
 coba
 dilatada
 encargar
-zorra
-mierda
-captar
-extremadamente
-comprobar
-contradecir
-razonar
-criar
-al fin y al cabo
-lo que
-tan precioso
-tropel
-camilla
-sauce
-registrar
-espantar
-tropezar
-enturbiarse
-barrer
-torturar
-arrojar
-rociar
-aclamar
-canario
-mandíbula
-sibato
-pitido
-matrecho
-sujetar
-seña
-salpicar
-entumecido
-turbulento
-sobresaltar
-azotar
-sordo
-ahogarar
-anulara
-derribar
-rogar

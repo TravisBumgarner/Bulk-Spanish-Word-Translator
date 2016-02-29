@@ -84,14 +84,18 @@ class dt():
         else:
             return True
     def printD(self):
-        print("Spanish Word".center(30,"-") + "|" +
+        print("Spanish Word".center(16,"-") + "|" +
               "English Word".center(30,"-") + "|" +
               "Words Seen".center(70,"-") + "|" +
               "Times Seen".center(15,"-"))
         sortedDictionary = sorted(self.dictionary)
         for each in sortedDictionary:
-            print(each.ljust(30) + "|" +
-                  self.dictionary[each][0].ljust(30) + "|" + 
+            if len(self.dictionary[each][0]) > 27:
+                dots = "..."
+            else:
+                dots = ""
+            print(each.ljust(16) + "|" +
+                  (self.dictionary[each][0][0:26] + dots).ljust(30) + "|" + 
                   str(self.dictionary[each][1]).ljust(70) + "|" +
                   str(self.dictionary[each][2]).ljust(15))
             
